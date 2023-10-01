@@ -32,5 +32,12 @@
       "warn",
       { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }
     ]
-  }
+  },
+  "root": true,
+  "overrides": [
+    {
+      "extends": ["plugin:@typescript-eslint/disable-type-checked"],
+      "files": ["./**/*.js"]
+    }
+  ]
 }
