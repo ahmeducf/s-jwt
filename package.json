@@ -36,7 +36,10 @@
     "node",
     "browser"
   ],
-  "author": "",
+  "author": {
+    "name": "Ahmed Salah",
+    "email": "ahmeducf10@gmail.com"
+  },
   "license": "MIT",
   "devDependencies": {
     "@types/chai": "^4.3.6",
@@ -61,7 +64,11 @@
   },
   "release": {
     "branches": [
-      "main"
+      "main",
+      {
+        "name": "develop",
+        "prerelease": "rc"
+      }
     ]
   },
   "publishConfig": {
