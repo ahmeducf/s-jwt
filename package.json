@@ -2,17 +2,16 @@
   "name": "@ahmeducf/s-jwt",
   "version": "1.0.0",
   "description": "A TypeScript library that implements the JSON Web Token (JWT) standard defined in RFC 7519. It provides a simple and easy-to-use API for generating and verifying JWTs, with support for various algorithms and options. This library is fully written in TypeScript and is designed to work with both Node.js and browser environments.",
-  "type": "commonjs",
   "main": "./lib/cjs/index.js",
-  "types": "./lib/cjs/index.d.ts",
+  "types": "./lib/cjs/types/index.d.ts",
   "exports": {
     ".": {
       "import": {
-        "types": "./lib/esm/index.d.ts",
-        "default": "./lib/esm/index.mjs"
+        "types": "./lib/esm/types/index.d.ts",
+        "default": "./lib/esm/index.js"
       },
       "require": {
-        "types": "./lib/cjs/index.d.ts",
+        "types": "./lib/cjs/types/index.d.ts",
         "default": "./lib/cjs/index.js"
       }
     }
@@ -22,9 +21,10 @@
   ],
   "scripts": {
     "clean": "rm -rf ./lib",
-    "build:esm": "tsc -p ./configs/tsconfig.esm.json && mv lib/esm/index.js lib/esm/index.mjs",
+    "fixup": "./scripts/fixup_package_type.sh",
+    "build:esm": "tsc -p ./configs/tsconfig.esm.json",
     "build:cjs": "tsc -p ./configs/tsconfig.cjs.json",
-    "build": "npm run clean && (npm run build:esm ; npm run build:cjs)",
+    "build": "npm run clean && (npm run build:esm ; npm run build:cjs) && npm run fixup",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "prepack": "npm run build",
@@ -42,12 +42,10 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@types/chai": "^4.3.6",
     "@types/jest": "^29.5.5",
     "@types/node": "^20.8.0",
     "@typescript-eslint/eslint-plugin": "6.7.3",
     "@typescript-eslint/parser": "6.7.3",
-    "chai": "^4.3.10",
     "eslint": "8.50.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.1.0",
