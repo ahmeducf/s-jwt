@@ -66,6 +66,10 @@
       {
         "name": "develop",
         "prerelease": "rc"
+      },
+      {
+        "name": "beta",
+        "prerelease": true
       }
     ]
   },
