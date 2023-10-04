@@ -14,7 +14,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
+          ref: ${{ github.event.workflow_run.head_branch }}
           fetch-depth: 0
+      - name: Set Branch Environment Variable
+        run: echo "export MY_BRANCH=${{ github.event.workflow_run.head_branch }}" >> $GITHUB_ENV
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
@@ -25,4 +28,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx semantic-release
+        run: npx semantic-release --branch $MY_BRANCH
