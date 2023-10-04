@@ -13,7 +13,6 @@ module.exports = {
   },
 
   moduleNameMapper: {
-    './generate.js': './generate.ts',
-    './verify.js': './verify.ts',
+    '(.*).js': '$1',
   },
 };
