@@ -3,3 +3,7 @@ export * from './generate_options';
 export * from './verify_options';
 export * from './algorithm';
 export * from './seconds_number';
+export * from './header';
+export * from './base64url';
+export * from './sjwt_error';
+export * from './validation_schema';
