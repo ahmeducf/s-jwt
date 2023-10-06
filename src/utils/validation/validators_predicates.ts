@@ -1,7 +1,7 @@
 import ms from 'ms';
 import { KeyObject } from 'crypto';
-import { Algorithm } from '../../types';
-import { ALGORITHMS } from '../../constants';
+import { Algorithm } from '../../types/index.js';
+import { ALGORITHMS } from '../../constants.js';
 
 export function isPlainObject(value: unknown): boolean {
   return typeof value === 'object' && value !== null && !Array.isArray(value);

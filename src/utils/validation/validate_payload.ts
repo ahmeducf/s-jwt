@@ -1,4 +1,4 @@
-import { Payload } from '../../types';
+import { Payload } from '../../types/index.js';
 import { payloadSchema } from './schemas/index.js';
 import validate from './validate.js';
 

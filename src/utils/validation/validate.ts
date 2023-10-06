@@ -1,5 +1,5 @@
-import { ValidationSchema, Payload, GenerateOptions } from '../../types';
-import { createSjwtValidationError } from '../error';
+import { ValidationSchema, Payload, GenerateOptions } from '../../types/index.js';
+import { createSjwtValidationError } from '../error/index.js';
 import { isPlainObject } from './validators_predicates.js';
 
 export function validate(

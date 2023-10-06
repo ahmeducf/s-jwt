@@ -1,4 +1,4 @@
-import { createHeaderBase64Url } from '../src/helpers';
+import { createHeaderBase64Url } from '../src/helpers/index.js';
 
 describe('createHeaderBase64Url', () => {
   it('should create a base64url encoded header with default algorithm "HS256"', () => {

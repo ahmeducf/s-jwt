@@ -1,5 +1,5 @@
-import { ValidationSchema, Validator } from '../../../types';
-import { isString, isValidSecondsNumber } from '../validators_predicates';
+import { ValidationSchema, Validator } from '../../../types/index.js';
+import { isString, isValidSecondsNumber } from '../validators_predicates.js';
 
 const issValidator: Validator = {
   isValid: isString,

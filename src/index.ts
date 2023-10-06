@@ -8,4 +8,4 @@ export default {
   verify,
 };
 
-export * from './types';
+export * from './types/index.js';

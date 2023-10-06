@@ -1,5 +1,5 @@
 import { KeyObject } from 'crypto';
-import { BaseGenerateOptions } from './base_generate_options';
+import { BaseGenerateOptions } from './base_generate_options.js';
 
 interface OptionsWithSecretKey extends BaseGenerateOptions {
   secretKey: string | Buffer | KeyObject;

@@ -1,5 +1,5 @@
-import { validatePayload } from '../src/utils/validation';
-import { Payload } from '../src/types';
+import { validatePayload } from '../src/utils/validation/index.js';
+import { Payload } from '../src/types/index.js';
 
 describe('validatePayload', () => {
   it('should validate a valid payload', () => {

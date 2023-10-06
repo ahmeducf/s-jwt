@@ -1,7 +1,7 @@
 import crypto from 'crypto';
-import { validateGenerateOptions } from '../src/utils/validation';
-import { GenerateOptions } from '../src/types';
-import { ALGORITHMS } from '../src/constants';
+import { validateGenerateOptions } from '../src/utils/validation/index.js';
+import { GenerateOptions } from '../src/types/index.js';
+import { ALGORITHMS } from '../src/constants.js';
 
 describe('validateGenerateOptions', () => {
   it('should validate a valid options object', () => {

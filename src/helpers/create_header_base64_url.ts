@@ -1,4 +1,4 @@
-import { Algorithm } from '../types';
+import { Algorithm } from '../types/index.js';
 import base64url from '../utils/base64url/index.js';
 import { createSjwtValidationError } from '../utils/error/index.js';
 import { isAlgorithm } from '../utils/validation/index.js';

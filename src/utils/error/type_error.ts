@@ -1,4 +1,4 @@
-import { SjwtTypeError } from '../../types';
+import { SjwtTypeError } from '../../types/index.js';
 
 function createSjwtTypeError(expected: string, actual: string): SjwtTypeError {
   const error = new Error();

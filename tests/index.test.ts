@@ -1,4 +1,4 @@
-import lib from '../src/index';
+import lib from '../src/index.js';
 
 const { generate, verify } = lib;
 

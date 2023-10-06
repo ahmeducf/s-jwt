@@ -1,5 +1,5 @@
-import { Base64Url } from '../../types';
-import { createSjwtTypeError } from '../error';
+import { Base64Url } from '../../types/index.js';
+import { createSjwtTypeError } from '../error/index.js';
 
 const encode = (plainInput: string): string => {
   if (typeof plainInput !== 'string') {

@@ -1,5 +1,5 @@
 import { KeyObject } from 'crypto';
-import { GenerateOptions } from '../types';
+import { GenerateOptions } from '../types/index.js';
 import { createSjwtValidationError } from '../utils/error/index.js';
 import { isPlainObject } from '../utils/validation/index.js';
 

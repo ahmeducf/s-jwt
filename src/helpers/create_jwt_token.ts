@@ -1,5 +1,5 @@
 import { KeyObject } from 'crypto';
-import { Algorithm } from '../types';
+import { Algorithm } from '../types/index.js';
 
 function createJwtToken(
   headerBase64Url: string,

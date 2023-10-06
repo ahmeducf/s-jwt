@@ -1,5 +1,5 @@
-import { ValidationSchema, Validator } from '../../../types';
-import { ALGORITHMS } from '../../../constants';
+import { ValidationSchema, Validator } from '../../../types/index.js';
+import { ALGORITHMS } from '../../../constants.js';
 import {
   isAlgorithm,
   isValidSecondsNumberOrTimespanString,
@@ -8,7 +8,7 @@ import {
   isBoolean,
   isValidSecretKey,
   isValidPrivateKey,
-} from '../validators_predicates';
+} from '../validators_predicates.js';
 
 const algorithmValidator: Validator = {
   isValid: isAlgorithm,

@@ -1,4 +1,4 @@
-import { Algorithm } from './types';
+import { Algorithm } from './types/index.js';
 
 export const ALGORITHMS: Algorithm[] = [
   'HS256',

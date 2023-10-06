@@ -1,11 +1,14 @@
-import { Payload, GenerateOptions } from './types';
+import { Payload, GenerateOptions } from './types/index.js';
 import {
   createHeaderBase64Url,
   createPayloadBase64Url,
   createJwtToken,
   getSecretOrPrivateKey,
 } from './helpers/index.js';
-import { validatePayload, validateGenerateOptions } from './utils/validation/index.js';
+import {
+  validatePayload,
+  validateGenerateOptions,
+} from './utils/validation/index.js';
 
 async function generate(
   payload: Payload,

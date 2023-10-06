@@ -1,4 +1,4 @@
-import base64url from '../src/utils/base64url';
+import base64url from '../src/utils/base64url/index.js';
 
 describe('base64url', () => {
   it('should encode a string', () => {

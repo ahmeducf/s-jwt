@@ -1,5 +1,5 @@
-import { generate } from '../src';
-import { Payload, GenerateOptions } from '../src/types';
+import { generate } from '../src/index.js';
+import { Payload, GenerateOptions } from '../src/types/index.js';
 
 describe('generate', () => {
   it('should return a jwt string', async () => {

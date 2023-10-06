@@ -1,6 +1,6 @@
 import crypto from 'crypto';
-import { getSecretOrPrivateKey } from '../src/helpers';
-import { GenerateOptions } from '../src/types';
+import { getSecretOrPrivateKey } from '../src/helpers/index.js';
+import { GenerateOptions } from '../src/types/index.js';
 
 describe('getSecretOrPrivateKey', () => {
   it('should return the secretKey if provided', () => {
