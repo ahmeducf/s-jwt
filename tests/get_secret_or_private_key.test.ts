@@ -2,6 +2,11 @@ import crypto from 'crypto';
 import { getSecretOrPrivateKey } from '../src/helpers/index.js';
 import { GenerateOptions } from '../src/types/index.js';
 
+jest.spyOn(crypto, 'generateKeyPairSync').mockReturnValue({
+  privateKey: 'privateKey' as never,
+  publicKey: 'publicKey' as never,
+});
+
 describe('getSecretOrPrivateKey', () => {
   it('should return the secretKey if provided', () => {
     const options: GenerateOptions = {
