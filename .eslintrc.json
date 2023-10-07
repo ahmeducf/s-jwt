@@ -15,7 +15,7 @@
   "parserOptions": {
     "project": "./configs/tsconfig.eslint.json"
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["@typescript-eslint", "import"],
   "rules": {
     "no-plusplus": ["warn", { "allowForLoopAfterthoughts": true }],
 
@@ -31,7 +31,10 @@
     "no-unused-vars": [
       "warn",
       { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }
-    ]
+    ],
+
+    // All imports should end with a .js extension
+    "import/extensions": ["error", "ignorePackages", { "js": "always" }]
   },
   "root": true,
   "overrides": [

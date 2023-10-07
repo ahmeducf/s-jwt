@@ -1,4 +1,4 @@
-import { BaseVerifyOptions } from './base_verify_options';
+import { BaseVerifyOptions } from './base_verify_options.js';
 
 interface OptionsWithSecretKey extends BaseVerifyOptions {
   secretKey: string | Buffer;
