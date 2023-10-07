@@ -15,6 +15,12 @@ export const ALGORITHMS: Algorithm[] = [
   'PS512',
 ];
 
+export const RSA_PRIVATE_KEY_INVALID: string = 'RSA_PRIVATE_KEY_INVALID';
+export const RSA_PRIVATE_KEY_INVALID_ERROR_MSG: string =
+  'Invalid RSA private key: The provided private key is not supported.';
+
 export default {
   ALGORITHMS,
+  RSA_PRIVATE_KEY_INVALID,
+  RSA_PRIVATE_KEY_INVALID_ERROR_MSG,
 };

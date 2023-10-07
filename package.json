@@ -75,6 +75,7 @@
     "access": "public"
   },
   "dependencies": {
+    "ecdsa-sig-formatter": "^1.0.11",
     "ms": "^2.1.3"
   }
 }
