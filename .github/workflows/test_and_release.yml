@@ -26,6 +26,8 @@ jobs:
         run: chmod +x ./scripts/fixup_package_type.sh
       - name: Run Tests
         run: npm test
+      - name: Echo NPM_TOKEN
+        run: echo ${{ secrets.NPM_TOKEN }}
       - name: Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
