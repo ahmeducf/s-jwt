@@ -10,10 +10,10 @@ import {
   validateGenerateOptions,
 } from './utils/validation/index.js';
 
-async function generate(
+export function generateSync(
   payload: Payload,
   options: GenerateOptions,
-): Promise<string> {
+): string {
   validatePayload(payload);
   validateGenerateOptions(options);
 
@@ -22,7 +22,7 @@ async function generate(
   const headerBase64Url: string = createHeaderBase64Url(options.algorithm);
   const payloadBase64Url: string = createPayloadBase64Url(payload, options);
 
-  const jwtToken: string = await createJwtToken(
+  const jwtToken: string = createJwtToken(
     headerBase64Url,
     payloadBase64Url,
     secretOrPrivateKey,
@@ -32,4 +32,14 @@ async function generate(
   return jwtToken;
 }
 
-export default generate;
+export async function generate(
+  payload: Payload,
+  options: GenerateOptions,
+): Promise<string> {
+  return generateSync(payload, options);
+}
+
+export default {
+  generate,
+  generateSync,
+}

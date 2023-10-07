@@ -1,7 +1,17 @@
 import { VerifyOptions, Payload } from './types/index.js';
 
-async function verify(token: string, options: VerifyOptions): Promise<Payload> {
+export function verifySync(token: string, options: VerifyOptions): Payload {
   return { test: 'test' };
 }
 
-export default verify;
+export async function verify(
+  token: string,
+  options: VerifyOptions,
+): Promise<Payload> {
+  return verifySync(token, options);
+}
+
+export default {
+  verify,
+  verifySync,
+};
