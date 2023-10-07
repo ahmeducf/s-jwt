@@ -7,8 +7,11 @@ export function isPlainObject(value: unknown): boolean {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-export const isAlgorithm = (value: unknown): value is Algorithm =>
-  ALGORITHMS.includes(value as Algorithm);
+export const isAlgorithm = (value: unknown): value is Algorithm => {
+  const algorithm: string = value as string;
+
+  return ALGORITHMS.includes(algorithm.toUpperCase() as Algorithm);
+};
 
 export const isValidSecondsNumber = (value: unknown): boolean =>
   typeof value === 'number' && value > 0;
@@ -38,10 +41,16 @@ export const isKeyObject = (value: unknown): value is KeyObject =>
   value instanceof KeyObject;
 
 export const isValidSecretKey = (value: unknown): boolean =>
-  isString(value) || isBuffer(value) || isKeyObject(value);
+  isString(value) ||
+  isBuffer(value) ||
+  (isKeyObject(value) && value.type === 'secret');
 
 export const isValidPrivateKey = (value: unknown): boolean =>
-  isString(value) || isBuffer(value) || isKeyObject(value);
+  isString(value) ||
+  isBuffer(value) ||
+  (isKeyObject(value) && value.type === 'private');
 
 export const isValidPublicKey = (value: unknown): boolean =>
-  isString(value) || isBuffer(value) || isKeyObject(value);
+  isString(value) ||
+  isBuffer(value) ||
+  (isKeyObject(value) && value.type === 'public');
