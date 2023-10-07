@@ -14,6 +14,7 @@ export function createPayloadBase64Url(
   options: GenerateOptions,
 ): string {
   const issueTime = Math.floor(Date.now() / 1000);
+  
   let PayloadObject: Payload = { ...payload };
 
   PayloadObject = setIat(PayloadObject, options, issueTime);
