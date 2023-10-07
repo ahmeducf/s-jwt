@@ -1,4 +1,4 @@
-import { SecondsNumber } from './seconds_number';
+import { SecondsNumber } from './seconds_number.js';
 
 export interface Payload {
   [key: string]: unknown;

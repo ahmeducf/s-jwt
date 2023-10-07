@@ -13,7 +13,7 @@ module.exports = {
   },
 
   moduleNameMapper: {
-    './generate.js': './generate.ts',
-    './verify.js': './verify.ts',
+    '(.*).js': '$1',
   },
+  testPathIgnorePatterns: ['<rootDir>/lib/', '<rootDir>/node_modules/'],
 };

@@ -1,9 +1,9 @@
-import { Algorithm } from './algorithm';
+import { Algorithm } from './algorithm.js';
 
 type SecondsNumber = number;
 
 export interface BaseGenerateOptions {
-  algorithm?: Algorithm | 'HS256';
+  algorithm?: Algorithm;
   expiresIn?: string | SecondsNumber;
   audience?: string | string[];
   issuer?: string;

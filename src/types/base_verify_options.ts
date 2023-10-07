@@ -1,5 +1,5 @@
-import { Algorithm } from './algorithm';
-import { SecondsNumber } from './seconds_number';
+import { Algorithm } from './algorithm.js';
+import { SecondsNumber } from './seconds_number.js';
 
 export interface BaseVerifyOptions {
   algorithms?: Algorithm[] | ['RS256', 'RS384', 'RS512'];
