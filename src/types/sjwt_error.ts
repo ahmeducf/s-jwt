@@ -1,7 +1,7 @@
-interface SjwtError {
+export interface SjwtError extends Error {
   name: string;
   message: string;
 }
 
-export type SjwtTypeError = SjwtError & Error;
-export type SjwtValidationError = SjwtError & Error;
+export type SjwtTypeError = SjwtError;
+export type SjwtValidationError = SjwtError;
