@@ -140,6 +140,16 @@ describe('privateKey', () => {
 });
 
 describe('algorithm', () => {
+  it('should be case insensitive', () => { 
+    const options: GenerateOptions = {
+      secretKey: 'secret',
+      algorithm: 'hs256' as never,
+    };
+
+    expect(() => validateGenerateOptions(options)).not.toThrow();
+  });
+
+
   it('should throw an error if the algorithm is not a valid algorithm', () => {
     const options = {
       secretKey: 'secret',
