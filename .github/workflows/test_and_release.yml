@@ -23,6 +23,8 @@ jobs:
           node-version: 'lts/*'
       - name: Install Dependencies
         run: npm ci
+      - name: Give fixup script execute permissions
+        run: chmod +x ./scripts/fixup_package_type.sh
       - name: Run Tests
         run: npm test
       - name: Release
