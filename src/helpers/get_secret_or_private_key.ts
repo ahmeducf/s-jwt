@@ -1,7 +1,12 @@
 import { KeyObject } from 'crypto';
-import { GenerateOptions } from '../types/index.js';
+import { GenerateOptions, Algorithm } from '../types/index.js';
 import { createSjwtValidationError } from '../utils/error/index.js';
-import { isPlainObject } from '../utils/validation/index.js';
+import {
+  isPlainObject,
+  isHmacAlgorithm,
+  isAsymmetricKeyAlgorithm,
+} from '../utils/validation/index.js';
+import { HMAC_ALGORITHMS, ASYMMETRIC_KEY_ALGORITHMS } from '../constants.js';
 
 export function getSecretOrPrivateKey(
   options: GenerateOptions,
@@ -20,8 +25,26 @@ export function getSecretOrPrivateKey(
     );
   }
 
+  const algorithm: Algorithm = options.algorithm ? options.algorithm : 'HS256';
+
   if ('secretKey' in options) {
+    if (!isHmacAlgorithm(algorithm)) {
+      throw createSjwtValidationError(
+        `SecretKey can only be used with supported HMAC algorithm [${HMAC_ALGORITHMS.join(
+          ', ',
+        )}]`,
+      );
+    }
+
     return options.secretKey;
+  }
+
+  if (!isAsymmetricKeyAlgorithm(algorithm)) {
+    throw createSjwtValidationError(
+      `PrivateKey can only be used with supported asymmetric key algorithm [${ASYMMETRIC_KEY_ALGORITHMS.join(
+        ', ',
+      )}]`,
+    );
   }
 
   return options.privateKey;
