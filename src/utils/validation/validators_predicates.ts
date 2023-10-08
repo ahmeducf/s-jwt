@@ -1,7 +1,15 @@
 import ms from 'ms';
 import { KeyObject } from 'crypto';
-import { Algorithm } from '../../types/index.js';
-import { ALGORITHMS } from '../../constants.js';
+import {
+  Algorithm,
+  HmacAlgorithm,
+  AsymmetricKeyAlgorithm,
+} from '../../types/index.js';
+import {
+  ALGORITHMS,
+  HMAC_ALGORITHMS,
+  ASYMMETRIC_KEY_ALGORITHMS,
+} from '../../constants.js';
 
 export function isPlainObject(value: unknown): boolean {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
@@ -12,6 +20,20 @@ export const isAlgorithm = (value: unknown): value is Algorithm => {
 
   return ALGORITHMS.includes(algorithm.toUpperCase() as Algorithm);
 };
+
+export function isHmacAlgorithm(value: Algorithm): value is HmacAlgorithm {
+  const algorithm: string = value as string;
+  return HMAC_ALGORITHMS.includes(algorithm.toUpperCase() as Algorithm);
+}
+
+export function isAsymmetricKeyAlgorithm(
+  value: Algorithm,
+): value is AsymmetricKeyAlgorithm {
+  const algorithm: string = value as string;
+  return ASYMMETRIC_KEY_ALGORITHMS.includes(
+    algorithm.toUpperCase() as Algorithm,
+  );
+}
 
 export const isValidSecondsNumber = (value: unknown): boolean =>
   typeof value === 'number' && value > 0;
