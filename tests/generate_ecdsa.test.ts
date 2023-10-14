@@ -1,7 +1,7 @@
 import crypto, { KeyObject } from 'crypto';
 import { generateSync } from '../src/index.js';
 import { Payload, GenerateOptions } from '../src/types/index.js';
-import { RSA_PRIVATE_KEY_INVALID_ERROR_MSG } from '../src/constants.js';
+import { ECDSA_PRIVATE_KEY_INVALID_ERROR_MSG } from '../src/constants.js';
 
 let PRIVATE_KEY_KEYOBJECT: KeyObject;
 let PRIVATE_KEY_STRING: string;
@@ -9,7 +9,7 @@ let PRIVATE_KEY_BUFFER: Buffer;
 
 beforeAll(() => {
   const keyPair = crypto.generateKeyPairSync('ec', {
-    namedCurve: 'secp256k1',
+    namedCurve: 'prime256v1',
   });
   PRIVATE_KEY_KEYOBJECT = keyPair.privateKey;
   PRIVATE_KEY_STRING = keyPair.privateKey.export({
@@ -85,7 +85,7 @@ describe('generate token with ECDSA algorithm', () => {
     };
 
     expect(() => generateSync(payload, options)).toThrow(
-      RSA_PRIVATE_KEY_INVALID_ERROR_MSG,
+      ECDSA_PRIVATE_KEY_INVALID_ERROR_MSG,
     );
   });
 
@@ -121,5 +121,26 @@ describe('generate token with ECDSA algorithm', () => {
     const jwtToken = generateSync(payload, options);
 
     expect(jwtToken).toMatch(/^.*\..*\..*$/);
+  });
+
+  it('should throw error if privateKey is not of type ECDSA', () => { 
+    const keyPair = crypto.generateKeyPairSync('rsa', {
+      modulusLength: 2048,
+    });
+
+    const payload: Payload = {
+      iss: 'test',
+      exp: 1234567890,
+      iat: 1234567890,
+      test: 'test',
+    };
+    const options: GenerateOptions = {
+      algorithm: 'ES256',
+      privateKey: keyPair.privateKey,
+    };
+
+    expect(() => generateSync(payload, options)).toThrowError(
+      ECDSA_PRIVATE_KEY_INVALID_ERROR_MSG,
+    );
   });
 });
