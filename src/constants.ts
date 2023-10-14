@@ -38,6 +38,10 @@ export const JWT_SIGNATURE_INVALID = 'JWT_SIGNATURE_INVALID';
 export const JWT_SIGNATURE_INVALID_ERROR_MSG =
   'Invalid JWT signature: The signature is not a valid base64url string.';
 
+export const JWT_TOKEN_MALFORMED = 'JWT_TOKEN_MALFORMED';
+export const JWT_TOKEN_MALFORMED_ERROR_MSG =
+  'Invalid JWT token: The token is not a valid JSON Web Token.';
+
 export default {
   ALGORITHMS,
   RSA_PRIVATE_KEY_INVALID,
