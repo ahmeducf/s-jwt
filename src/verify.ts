@@ -11,14 +11,14 @@ import {
 } from './utils/validation/index.js';
 
 export function verifySync(token: string, options: VerifyOptions): Payload {
-  validateVerifyOptions(options);
+  const validatedOptions = validateVerifyOptions(options);
   validateToken(token);
 
   const { header, payload, signature } = decodeToken(token);
 
-  verifyHeader(header, options);
-  verifyPayload(payload, options);
-  verifySignature(token, signature, options);
+  verifyHeader(header, validatedOptions);
+  verifyPayload(payload, validatedOptions);
+  verifySignature(token, signature, validatedOptions);
 
   return payload;
 }

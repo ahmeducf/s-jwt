@@ -3,11 +3,17 @@ import { KeyObject } from 'crypto';
 import {
   Algorithm,
   HmacAlgorithm,
+  RsaAlgorithm,
+  PssAlgorithm,
+  EcdsaAlgorithm,
   AsymmetricKeyAlgorithm,
 } from '../../types/index.js';
 import {
   ALGORITHMS,
   HMAC_ALGORITHMS,
+  RSA_ALGORITHMS,
+  PSS_ALGORITHMS,
+  ECDSA_ALGORITHMS,
   ASYMMETRIC_KEY_ALGORITHMS,
 } from '../../constants.js';
 
@@ -24,6 +30,21 @@ export const isAlgorithm = (value: unknown): value is Algorithm => {
 export function isHmacAlgorithm(value: Algorithm): value is HmacAlgorithm {
   const algorithm: string = value as string;
   return HMAC_ALGORITHMS.includes(algorithm.toUpperCase() as Algorithm);
+}
+
+export function isRsaAlgorithm(value: Algorithm): value is RsaAlgorithm {
+  const algorithm: string = value as string;
+  return RSA_ALGORITHMS.includes(algorithm.toUpperCase() as Algorithm);
+}
+
+export function isPssAlgorithm(value: Algorithm): value is PssAlgorithm {
+  const algorithm: string = value as string;
+  return PSS_ALGORITHMS.includes(algorithm.toUpperCase() as Algorithm);
+}
+
+export function isEcdsaAlgorithm(value: Algorithm): value is EcdsaAlgorithm {
+  const algorithm: string = value as string;
+  return ECDSA_ALGORITHMS.includes(algorithm.toUpperCase() as Algorithm);
 }
 
 export function isAsymmetricKeyAlgorithm(
@@ -49,6 +70,16 @@ export const isArrayOfStrings = (value: unknown): boolean =>
 
 export const isString = (value: unknown): value is string =>
   typeof value === 'string';
+
+export const isRegExp = (value: unknown): value is RegExp =>
+  value instanceof RegExp;
+
+export const isStringOrRegExp = (value: unknown): boolean =>
+  isString(value) || isRegExp(value);
+
+export const isArrayOfStringsOrRegexps = (value: unknown): boolean =>
+  Array.isArray(value) &&
+  value.every((item) => isString(item) || isRegExp(item));
 
 export const isValidAudience = (value: unknown): boolean =>
   isString(value) || isArrayOfStrings(value);

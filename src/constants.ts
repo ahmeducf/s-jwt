@@ -1,17 +1,16 @@
 import { Algorithm } from './types/index.js';
 
 export const HMAC_ALGORITHMS: Algorithm[] = ['HS256', 'HS384', 'HS512'];
+export const RSA_ALGORITHMS: Algorithm[] = ['RS256', 'RS384', 'RS512'];
+export const PSS_ALGORITHMS: Algorithm[] = ['PS256', 'PS384', 'PS512'];
+export const ECDSA_ALGORITHMS: Algorithm[] = ['ES256', 'ES384', 'ES512'];
 
 export const ASYMMETRIC_KEY_ALGORITHMS: Algorithm[] = [
-  'RS256',
-  'RS384',
-  'RS512',
+  ...RSA_ALGORITHMS,
+  ...ECDSA_ALGORITHMS,
   'PS256',
   'PS384',
   'PS512',
-  'ES256',
-  'ES384',
-  'ES512',
 ];
 
 export const ALGORITHMS: Algorithm[] = [
@@ -44,6 +43,14 @@ export const JWT_TOKEN_MALFORMED_ERROR_MSG =
 
 export default {
   ALGORITHMS,
+  HMAC_ALGORITHMS,
+  RSA_ALGORITHMS,
+  ECDSA_ALGORITHMS,
+  ASYMMETRIC_KEY_ALGORITHMS,
+  JWT_TOKEN_MALFORMED,
+  JWT_TOKEN_MALFORMED_ERROR_MSG,
+  JWT_SIGNATURE_INVALID,
+  JWT_SIGNATURE_INVALID_ERROR_MSG,
   RSA_PRIVATE_KEY_INVALID,
   RSA_PRIVATE_KEY_INVALID_ERROR_MSG,
   ECDSA_PRIVATE_KEY_INVALID,
