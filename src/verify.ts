@@ -17,8 +17,8 @@ export function verifySync(token: string, options: VerifyOptions): Payload {
   const { header, payload, signature } = decodeToken(token);
 
   verifyHeader(header, validatedOptions);
-  verifyPayload(payload, validatedOptions);
   verifySignature(token, signature, validatedOptions);
+  verifyPayload(payload, validatedOptions);
 
   return payload;
 }
