@@ -8,13 +8,13 @@ let PRIVATE_KEY_STRING: string;
 let PRIVATE_KEY_BUFFER: Buffer;
 
 beforeAll(() => {
-  const keyPair = crypto.generateKeyPairSync('rsa', {
+  const keyPair = crypto.generateKeyPairSync('rsa-pss', {
     modulusLength: 2048,
   });
   PRIVATE_KEY_KEYOBJECT = keyPair.privateKey;
   PRIVATE_KEY_STRING = keyPair.privateKey.export({
     format: 'pem',
-    type: 'pkcs1',
+    type: 'pkcs8',
   }) as string;
 
   PRIVATE_KEY_BUFFER = Buffer.from(PRIVATE_KEY_STRING);
