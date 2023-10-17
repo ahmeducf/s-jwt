@@ -1,6 +1,9 @@
 import { KeyObject, createSecretKey, createPublicKey } from 'crypto';
 import { VerifyOptions } from '../../../types/index.js';
-import { createSjwtTypeError, createSjwtValidationError } from '../../error/index.js';
+import {
+  createSjwtTypeError,
+  createSjwtValidationError,
+} from '../../error/index.js';
 import {
   isHmacAlgorithm,
   isRsaAlgorithm,
@@ -60,6 +63,10 @@ export function validateSecretOrPublicKey(
           '"secretKey" is not a valid key material for symmetric algorithms',
         );
       }
+    } else if (newOptions.secretKey.type !== 'secret') {
+      throw createSjwtValidationError(
+        '"secretKey" must be a secret key material for symmetric algorithms',
+      );
     }
 
     if (Array.isArray(newOptions.algorithms)) {
@@ -89,6 +96,10 @@ export function validateSecretOrPublicKey(
           '"publicKey" is not a valid key material for asymmetric algorithms',
         );
       }
+    } else if (newOptions.publicKey.type !== 'public') {
+      throw createSjwtValidationError(
+        '"publicKey" must be a public key material for asymmetric algorithms',
+      );
     }
 
     if (Array.isArray(newOptions.algorithms)) {

@@ -4,6 +4,7 @@ import {
   verifyHeader,
   verifyPayload,
   verifySignature,
+  getSecretOrPublicKey,
 } from './helpers/index.js';
 import {
   validateVerifyOptions,
@@ -14,10 +15,11 @@ export function verifySync(token: string, options: VerifyOptions): Payload {
   const validatedOptions = validateVerifyOptions(options);
   validateToken(token);
 
-  const { header, payload, signature } = decodeToken(token);
+  const secretOrPublicKey = getSecretOrPublicKey(validatedOptions);
+  const { header, payload } = decodeToken(token);
 
   verifyHeader(header, validatedOptions);
-  verifySignature(token, signature, validatedOptions);
+  verifySignature(token, header.alg, secretOrPublicKey);
   verifyPayload(payload, validatedOptions);
 
   return payload;

@@ -27,6 +27,7 @@
     "build": "npm run clean && (npm run build:esm ; npm run build:cjs) && npm run fixup",
     "test": "jest",
     "test:watch": "jest --watchAll",
+    "test:coverage": "jest --coverage",
     "prepack": "npm run build",
     "semantic-release": "semantic-release",
     "prepare": "husky install"
@@ -84,6 +85,7 @@
     "access": "public"
   },
   "dependencies": {
+    "buffer-equal-constant-time": "^1.0.1",
     "ecdsa-sig-formatter": "^1.0.11",
     "ms": "^2.1.3"
   },
