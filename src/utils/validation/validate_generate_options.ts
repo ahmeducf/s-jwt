@@ -3,7 +3,7 @@ import { generateOptionsSchema } from './schemas/index.js';
 import validate from './validate.js';
 import { createSjwtValidationError } from '../error/index.js';
 
-function validateGenerateOptions(options: GenerateOptions): void {
+export function validateGenerateOptions(options: GenerateOptions): void {
   validate(generateOptionsSchema, false, options, 'options');
 
   if (

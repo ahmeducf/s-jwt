@@ -10,7 +10,7 @@ import {
   RSA_PRIVATE_KEY_INVALID_ERROR_MSG,
 } from '../constants.js';
 
-function createHmacSignatureFunction(bits: string): SignatureFunction {
+export function createHmacSignatureFunction(bits: string): SignatureFunction {
   return function hmacSignatureFunction(
     input: string,
     secret: string | Buffer | KeyObject,
@@ -61,7 +61,7 @@ function createRsaPssSignatureFunction(bits: string): SignatureFunction {
     if (typeof privateKey === 'string' || privateKey instanceof Buffer) {
       key = privateKey;
     } else {
-      key = privateKey.export({ type: 'pkcs1', format: 'pem' });
+      key = privateKey.export({ type: 'pkcs8', format: 'pem' });
     }
 
     const sign = crypto.createSign(`RSA-SHA${bits}`);
