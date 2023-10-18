@@ -1,12 +1,12 @@
 import { KeyObject } from 'crypto';
 import { BaseVerifyOptions } from './base_verify_options.js';
 
-interface OptionsWithSecretKey extends BaseVerifyOptions {
+interface VerifyOptionsWithSecretKey extends BaseVerifyOptions {
   secretKey: string | Buffer | KeyObject;
 }
 
-interface OptionsWithPublicKey extends BaseVerifyOptions {
+interface VerifyOptionsWithPublicKey extends BaseVerifyOptions {
   publicKey: string | Buffer | KeyObject;
 }
 
-export type VerifyOptions = OptionsWithSecretKey | OptionsWithPublicKey;
+export type VerifyOptions = VerifyOptionsWithSecretKey | VerifyOptionsWithPublicKey;
