@@ -84,12 +84,18 @@ try {
 
 ## Installation
 
+Install with npm:
+
 ```bash
 
-# Install with npm
 npm install @ahmeducf/s-jwt
 
-# Install with yarn
+```
+
+Install with yarn:
+
+```bash
+
 yarn add @ahmeducf/s-jwt
 
 ```
