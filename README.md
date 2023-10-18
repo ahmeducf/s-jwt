@@ -1,5 +1,5 @@
 <h1 align="center" style="border-bottom: none;">s-jwt</h1>
-<h2 align="center" style="font-size:1.17em"><em>Generate and verify with ease in TypeScript</em></h2>
+<h2 align="center" style="font-size:1.17em"><em>Generate and verify JWTs with ease in TypeScript</em></h2>
 
 <p align="center">
   <a href="https://www.conventionalcommits.org/en/v1.0.0/">
