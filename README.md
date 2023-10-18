@@ -14,6 +14,18 @@
 </p>
 
 <p align="center">
+  <a href="https://www.npmjs.com/package/@ahmeducf/s-jwt">
+    <img alt="npm latest version" src="https://img.shields.io/npm/v/@ahmeducf/s-jwt/latest.svg?logo=npm">
+  </a>
+  <a href="https://npmjs.com/package/@ahmeducf/s-jwt">
+    <img alt="npm" src="https://img.shields.io/npm/dt/%40ahmeducf%2Fs-jwt?logo=npm">
+  </a>
+  <a href="https://www.npmjs.com/package/@ahmeducf/s-jwt">
+    <img alt="npm beta version" src="https://img.shields.io/npm/v/@ahmeducf/s-jwt/beta.svg?logo=npm">
+  </a>
+</p>
+
+<p align="center">
   <a href="https://github.com/airbnb/javascript">
     <img alt="Followed style guide" src="https://img.shields.io/badge/style_guide-Airbnb-FF5A5F?logo=airbnb&style=flat">
   </a>
@@ -26,18 +38,6 @@
 </p>
 
 <p align="center">
-  <a href="https://www.npmjs.com/package/@ahmeducf/s-jwt">
-    <img alt="npm latest version" src="https://img.shields.io/npm/v/@ahmeducf/s-jwt/latest.svg?logo=npm">
-  </a>
-  <a href="https://www.npmjs.com/package/@ahmeducf/s-jwt">
-    <img alt="npm beta version" src="https://img.shields.io/npm/v/@ahmeducf/s-jwt/beta.svg?logo=npm">
-  </a>
-</p>
-
-<p align="center">
-  <a href="https://npmjs.com/package/@ahmeducf/s-jwt">
-    <img alt="npm" src="https://img.shields.io/npm/dt/%40ahmeducf%2Fs-jwt?logo=npm">
-  </a>
   <a href="https://github.com/ahmeducf/s-jwt/actions?query=workflow%3ATest%20and%20Release+branch%3Amain">  
     <img alt="GitHub Workflow Status (with event)" src="https://img.shields.io/github/actions/workflow/status/ahmeducf/s-jwt/test_and_release.yml?logo=github&labelColor=3C444C">
   </a>
