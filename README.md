@@ -65,8 +65,27 @@ try {
 - [Installation](#installation)
 - [Usage Examples](#usage-examples)
   - [Generate a JWT](#generate-a-jwt)
+    - [Synchronous generation with default (HMAC SHA256) algorithm](#synchronous-generation-with-default-hmac-sha256-algorithm)
+    - [Synchronous generation with HMAC SHA512 algorithm](#synchronous-generation-with-hmac-sha512-algorithm)
+    - [Generate a token with asymmetric key algorithm](#generate-a-token-with-asymmetric-key-algorithm-rsa-sha256-in-this-example)
+    - [Asynchronous generation](#asynchronous-generation)
+    - [(Async/Await) Asynchronous generation](#asyncawait-asynchronous-generation)
+    - [Generate a token with backdated `iat` claim](#generate-a-token-with-backdated-iat-claim)
+    - [Generate a token with 1 hour expiration time](#generate-a-token-with-1-hour-expiration-time)
+    - [Generate a token with 1 hour expiration time (using `expiresIn`)](#generate-a-token-with-1-hour-expiration-time-using-expiresin)
+    - [Generate a token with 2 weeks expiration time](#generate-a-token-with-2-weeks-expiration-time)
   - [Verify a JWT](#verify-a-jwt)
-- [API](#api)
+    - [Synchronous verification with default (HMAC SHA256) algorithm](#synchronous-verification-with-default-hmac-sha256-algorithm)
+    - [Verify a token with asymmetric key algorithm](#verify-a-token-with-asymmetric-key-algorithm-rsa-sha256-in-this-example)
+    - [Asynchronous verification](#asynchronous-verification)
+    - [(Async/Await) Asynchronous verification](#asyncawait-asynchronous-verification)
+    - [Ignore expiration time verification](#ignore-expiration-time-verification)
+    - [Verify algorithm](#verify-algorithm)
+    - [Verify audience](#verify-audience)
+    - [Verify issuer](#verify-issuer)
+    - [Verify JWT ID](#verify-jwt-id)
+    - [Verify subject](#verify-subject)
+- [API Reference](#api-reference)
   - [Types](#types)
     - [Algorithm](#algorithm)
     - [SecondsNumber](#secondsnumber)
@@ -415,7 +434,7 @@ try {
 }
 ```
 
-## API
+## API Reference
 
 The library has a simple and easy-to-use API. It provides two functions for generating and verifying JWTs, accompanied by a set of types and interfaces.
 
