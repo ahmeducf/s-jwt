@@ -63,8 +63,20 @@ try {
 - [Introduction](#introduction)
 - [Features](#features)
 - [Installation](#installation)
-- [Usage](#usage)
+- [Usage Examples](#usage-examples)
+  - [Generate a JWT](#generate-a-jwt)
+  - [Verify a JWT](#verify-a-jwt)
 - [API](#api)
+  - [Types](#types)
+    - [Algorithm](#algorithm)
+    - [SecondsNumber](#secondsnumber)
+    - [Payload](#payload)
+    - [GenerateOptions](#basegenerateoptions)
+    - [VerifyOptions](#baseverifyoptions)
+    - [SjwtError](#sjwterror)
+  - [Functions](#functions)
+    - [generateSync / generate](#generatesync--generate)
+    - [verifySync / verify](#verifysync--verify)
 - [Errors](#errors)
 - [Supported Algorithms](#supported-algorithms)
 - [Contributing](#contributing)
@@ -99,6 +111,308 @@ Install with yarn:
 
 yarn add @ahmeducf/s-jwt
 
+```
+
+## Usage Examples
+
+This section contains some examples of how to use the library API.
+
+### Generate a JWT
+
+#### Synchronous generation with default (HMAC SHA256) algorithm
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+const jwtToken = jwt.generateSync({ foo: 'bar' }, { secretKey: 'secret' });
+```
+
+#### Synchronous generation with HMAC SHA512 algorithm
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+try {
+  const jwtToken = jwt.generateSync(
+    { foo: 'bar' },
+    { secretKey: 'secret', algorithm: 'HS512' },
+  );
+} catch (error) {
+  // Handle error
+}
+```
+
+#### Generate a token with asymmetric key algorithm (RSA SHA256 in this example)
+
+```typescript
+import fs from 'fs';
+import jwt, { GenerateOptions } from '@ahmeducf/s-jwt';
+
+const rsaPrivateKey: Buffer = fs.readFileSync('rsa.private.key');
+
+const options: GenerateOptions = {
+  privateKey: rsaPrivateKey,
+  algorithm: 'RS256',
+};
+
+try {
+  const jwtToken = jwt.generateSync({ foo: 'bar' }, options);
+} catch (error) {
+  // Handle error
+}
+```
+
+#### Asynchronous generation
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+const jwtToken = jwt
+  .generate({ foo: 'bar' }, { secretKey: 'secret' })
+  .then((jwtToken) => {
+    // Handle success
+  })
+  .catch((error) => {
+    // Handle error
+  });
+```
+
+#### (Async/Await) Asynchronous generation
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+async function generateAsync(payload: Payload, options: GenerateOptions): void {
+  try {
+    const jwtToken = await jwt.generate(payload, options);
+    // Handle success
+  } catch (error) {
+    // Handle error
+  }
+}
+
+generateAsync({ foo: 'bar' }, { secretKey: 'secret' });
+```
+
+#### Generate a token with backdated `iat` claim
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+try {
+  const jwtToken = jwt.generateSync(
+    { foo: 'bar', iat: Math.floor(Date.now() / 1000) - 30 },
+    { secretKey: 'secret' },
+  );
+} catch (error) {
+  // Handle error
+}
+```
+
+#### Generate a token with 1 hour expiration time
+
+```typescript
+import jwt, { Payload } from '@ahmeducf/s-jwt';
+
+const payload: Payload = {
+  foo: 'bar',
+  exp: Math.floor(Date.now() / 1000) + 3600,
+};
+
+try {
+  const jwtToken: string = jwt.generateSync(payload, { secretKey: 'secret' });
+} catch (error) {
+  // Handle error
+}
+```
+
+#### Generate a token with 1 hour expiration time (using `expiresIn`)
+
+```typescript
+import jwt, { GenerateOptions} from '@ahmeducf/s-jwt';
+
+const options: GenerateOptions = {
+  secretKey: 'secret'
+  expiresIn: '1h',
+}
+
+try {
+  const jwtToken: string = jwt.generateSync({ foo: 'bar' }, options);
+} catch (error) {
+  // Handle error
+}
+```
+
+#### Generate a token with 2 weeks expiration time
+
+```typescript
+import jwt, { GenerateOptions } from '@ahmeducf/s-jwt';
+
+const options: GenerateOptions = {
+  secretKey: 'secret',
+  expiresIn: '2 weeks', // equivalent to 1209600, '14 days', '336h', '20160m', '1209600s', '2016000000'
+};
+
+try {
+  const jwtToken: string = jwt.generateSync({ foo: 'bar' }, options);
+} catch (error) {
+  // Handle error
+}
+```
+
+### Verify a JWT
+
+#### Synchronous verification with default (HMAC SHA256) algorithm
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+try {
+  const decodedPayload = jwt.verifySync(jwtToken, { secretKey: 'secret' });
+} catch (error) {
+  // Handle error
+}
+```
+
+#### Verify a token with asymmetric key algorithm (RSA SHA256 in this example)
+
+```typescript
+import fs from 'fs';
+import jwt, { VerifyOptions } from '@ahmeducf/s-jwt';
+
+const rsaPublicKey: Buffer = fs.readFileSync('rsa.public.key');
+
+const options: VerifyOptions = {
+  publicKey: rsaPublicKey,
+  algorithms: ['RS256'],
+};
+
+try {
+  const decodedPayload = jwt.verifySync(jwtToken, options);
+} catch (error) {
+  // Handle error
+}
+```
+
+#### Asynchronous verification
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+const decodedPayload = jwt
+  .verify(token, { secretKey: 'secret' })
+  .then((decodedPayload) => {
+    // Handle success
+  })
+  .catch((error) => {
+    // Handle error
+  });
+```
+
+#### (Async/Await) Asynchronous verification
+
+```typescript
+import jwt, { VerifyOptions } from '@ahmeducf/s-jwt';
+
+async function verifyAsync(token: string, options: VerifyOptions): void {
+  try {
+    const decodedPayload = await jwt.verify(token, options);
+    // Handle success
+  } catch (error) {
+    // Handle error
+  }
+}
+
+verifyAsync({ foo: 'bar' }, { secretKey: 'secret' });
+```
+
+#### Ignore expiration time verification
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+try {
+  const decodedPayload = jwt.verifySync(token, {
+    secretKey: 'secret',
+    ignoreExpiration: true,
+  });
+} catch (error) {
+  // Handle error
+}
+```
+
+#### Verify algorithm
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+try {
+  const decodedPayload = jwt.verifyAsync(token, {
+    secretKey: 'secret',
+    algorithms: ['HS256'],
+  });
+} catch (error) {
+  // If the algorithm in the token header is not HS256, error === SjwtVerificationError
+}
+```
+
+#### Verify audience
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+try {
+  const decodedPayload = jwt.verifySync(token, {
+    secretKey: 'secret',
+    audience: 'foo',
+  });
+} catch (error) {
+  // If the audience in the token payload is not foo, error === SjwtVerificationError
+}
+```
+
+#### Verify issuer
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+try {
+  const decodedPayload = jwt.verifySync(token, {
+    secretKey: 'secret',
+    issuer: ['foo', 'bar'],
+  });
+} catch (error) {
+  // If the issuer in the token payload is not foo or bar, error === SjwtVerificationError
+}
+```
+
+#### Verify JWT ID
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+try {
+  const decodedPayload = jwt.verifySync(token, {
+    secretKey: 'secret',
+    jwtId: 'foo',
+  });
+} catch (error) {
+  // If the JWT ID in the token payload is not foo, error === SjwtVerificationError
+}
+```
+
+#### Verify subject
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+try {
+  const decodedPayload = jwt.verifySync(token, {
+    secretKey: 'secret',
+    subject: 'foo',
+  });
+} catch (error) {
+  // If the subject in the token payload is not foo, error === SjwtVerificationError
+}
 ```
 
 ## API
@@ -366,10 +680,14 @@ interface SjwtExpiredTokenError extends SjwtVerificationError {
 
 The library provides the following functions:
 
-#### `generateSync(payload: Payload, options: GenerateOptions): string` <br> `generate(payload: Payload, options: GenerateOptions): Promise<string>`
+#### `generateSync / generate`
+
+`generateSync(payload: Payload, options: GenerateOptions): string`
 
 The `generateSync` function is a synchronous function that generates a JWT.
 It takes a payload and options as arguments and returns a JWT string.
+
+`generate(payload: Payload, options: GenerateOptions): Promise<string>`
 
 The `generate` function is promise-based asynchronous version of `generateSync`.
 
@@ -406,10 +724,14 @@ The `generate` function is promise-based asynchronous version of `generateSync`.
 
 - **Returns**: In case of successful generation, the generated JWT is returned. Otherwise, an error is thrown.
 
-#### `verifySync(token: string, options: VerifyOptions): Payload` <br> `verify(token: string, options: VerifyOptions): Promise<Payload>`
+#### `verifySync / verify`
+
+`verifySync(token: string, options: VerifyOptions): Payload`
 
 The `verifySync` function is a synchronous function that verifies a JWT.
 It takes a JWT string and options as arguments and returns the decoded payload.
+
+`verify(token: string, options: VerifyOptions): Promise<Payload>`
 
 The `verify` function is promise-based asynchronous version of `verifySync`.
 
