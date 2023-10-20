@@ -38,7 +38,7 @@ describe('verify Payload Expiration', () => {
       secretKey: 'secret',
     };
     expect(() => verifyExpiration(payload, options)).toThrow(
-      'The payload.exp property must be a number.',
+      'Expected type to be number, got string',
     );
   });
 
@@ -85,7 +85,7 @@ describe('verify Payload Expiration', () => {
       maxAge: 10,
     };
     expect(() => verifyExpiration(payload, options)).toThrow(
-      'The payload.iat property must be a number.',
+      'Expected type to be number, got string',
     );
   });
 

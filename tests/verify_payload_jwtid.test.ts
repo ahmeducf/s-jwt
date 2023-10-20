@@ -29,7 +29,7 @@ describe('Verify Payload JWT ID', () => {
     };
 
     expect(() => verifyJwtId(payload, options)).toThrow(
-      'The payload.jti property must be a string.',
+      'Expected type to be string, got number',
     );
   });
 
