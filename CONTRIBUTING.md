@@ -1,9 +1,5 @@
 # Contributing to s-jwt
 
-> [!NOTE]
->
-> This README is for the beta version of the library, which is still under development in the [beta](/ahmeducf/s-jwt/tree/beta) branch.
-
 ## How to contribute
 
 ### 1. Fork the repository

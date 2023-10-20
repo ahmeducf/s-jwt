@@ -24,6 +24,7 @@ describe('getSecretOrPrivateKey', () => {
     });
 
     const options: GenerateOptions = {
+      algorithm: 'RS256',
       privateKey: keypair.privateKey,
     };
 

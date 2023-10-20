@@ -8,3 +8,4 @@ export * from './base64url.js';
 export * from './sjwt_error.js';
 export * from './validation_schema.js';
 export * from './signature_function.js';
+export * from './verification_function.js';

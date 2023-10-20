@@ -4,11 +4,13 @@ import { Algorithm, SignatureFunction } from '../types/index.js';
 import base64url from '../utils/base64url/index.js';
 import { createSjwtError } from '../utils/error/index.js';
 import {
+  ECDSA_PRIVATE_KEY_INVALID,
+  ECDSA_PRIVATE_KEY_INVALID_ERROR_MSG,
   RSA_PRIVATE_KEY_INVALID,
   RSA_PRIVATE_KEY_INVALID_ERROR_MSG,
 } from '../constants.js';
 
-function createHmacSignatureFunction(bits: string): SignatureFunction {
+export function createHmacSignatureFunction(bits: string): SignatureFunction {
   return function hmacSignatureFunction(
     input: string,
     secret: string | Buffer | KeyObject,
@@ -59,7 +61,7 @@ function createRsaPssSignatureFunction(bits: string): SignatureFunction {
     if (typeof privateKey === 'string' || privateKey instanceof Buffer) {
       key = privateKey;
     } else {
-      key = privateKey.export({ type: 'pkcs1', format: 'pem' });
+      key = privateKey.export({ type: 'pkcs8', format: 'pem' });
     }
 
     const sign = crypto.createSign(`RSA-SHA${bits}`);
@@ -94,22 +96,23 @@ function createEcdsaSignatureFunction(bits: string): SignatureFunction {
     input: string,
     privateKey: string | Buffer | KeyObject,
   ): string {
+    let signatureBase64Url: string;
     const sign = crypto.createSign(`RSA-SHA${bits}`);
 
     sign.update(input);
     let signatureBase64: string;
     try {
       signatureBase64 = sign.sign(privateKey, 'base64');
+
+      signatureBase64Url = base64url.fromBase64(
+        formatEcdsa.derToJose(signatureBase64, `ES${bits}`),
+      );
     } catch (error) {
       throw createSjwtError(
-        RSA_PRIVATE_KEY_INVALID,
-        RSA_PRIVATE_KEY_INVALID_ERROR_MSG,
+        ECDSA_PRIVATE_KEY_INVALID,
+        ECDSA_PRIVATE_KEY_INVALID_ERROR_MSG,
       );
     }
-
-    const signatureBase64Url: string = base64url.fromBase64(
-      formatEcdsa.derToJose(signatureBase64, `ES${bits}`),
-    );
 
     return signatureBase64Url;
   };

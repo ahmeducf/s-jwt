@@ -1,7 +1,10 @@
 import crypto, { KeyObject } from 'crypto';
 import { generateSync } from '../src/index.js';
 import { Payload, GenerateOptions } from '../src/types/index.js';
-import { RSA_PRIVATE_KEY_INVALID_ERROR_MSG } from '../src/constants.js';
+import {
+  RSA_PRIVATE_KEY_INVALID_ERROR_MSG,
+  HMAC_ALGORITHMS,
+} from '../src/constants.js';
 
 let PRIVATE_KEY_KEYOBJECT: KeyObject;
 let PRIVATE_KEY_STRING: string;
@@ -87,6 +90,47 @@ describe('generate token with RSA algorithm', () => {
     expect(() => generateSync(payload, options)).toThrowError(
       RSA_PRIVATE_KEY_INVALID_ERROR_MSG,
     );
+  });
+
+  it('should throw an error when secretKey is provided instead of privateKey', () => {
+    const payload: Payload = {
+      iss: 'test',
+      exp: 1234567890,
+      iat: 1234567890,
+      test: 'test',
+    };
+    const options: GenerateOptions = {
+      algorithm: 'RS256',
+      secretKey: 'test',
+    };
+
+    expect(() => generateSync(payload, options)).toThrowError(
+      `SecretKey can only be used with supported HMAC algorithm [${HMAC_ALGORITHMS.join(
+        ', ',
+      )}]`,
+    );
+  });
+
+  it('should generate a token even with ecdsa privateKey', () => {
+    const keyPair = crypto.generateKeyPairSync('ec', {
+      namedCurve: 'prime256v1',
+    });
+
+    const payload: Payload = {
+      iss: 'test',
+      exp: 1234567890,
+      iat: 1234567890,
+      test: 'test',
+    };
+
+    const options: GenerateOptions = {
+      algorithm: 'RS256',
+      privateKey: keyPair.privateKey,
+    };
+
+    const jwtToken = generateSync(payload, options);
+
+    expect(jwtToken).toMatch(/^.*\..*\..*$/);
   });
 });
 
