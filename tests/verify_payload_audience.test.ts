@@ -133,7 +133,7 @@ describe('Verify Payload Audience', () => {
     };
 
     expect(() => verifyAudience(payload, options)).toThrow(
-      'The payload.aud property must be a string or an array of strings.',
+      'Expected type to be string or array of strings, got number',
     );
   });
 

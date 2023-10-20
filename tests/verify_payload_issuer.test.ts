@@ -51,7 +51,7 @@ describe('Verify Payload Issuer', () => {
     };
 
     expect(() => verifyIssuer(payload, options)).toThrow(
-      'The payload.iss property must be a string.',
+      'Expected type to be string, got number',
     );
   });
 

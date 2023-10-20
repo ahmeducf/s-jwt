@@ -1,8 +1,10 @@
 import ms from 'ms';
 import { Payload, VerifyOptions } from '../types/index.js';
 import {
+  createSjwtTypeError,
   createSjwtVerificationError,
   createSjwtExpiredTokenError,
+  createSjwtValidationError,
 } from '../utils/error/index.js';
 
 export function verifyExpiration(
@@ -14,10 +16,7 @@ export function verifyExpiration(
 
   if (typeof payload.exp !== 'undefined' && !options.ignoreExpiration) {
     if (typeof payload.exp !== 'number') {
-      throw createSjwtVerificationError(
-        'InvalidPayload',
-        'The payload.exp property must be a number.',
-      );
+      throw createSjwtTypeError('number', typeof payload.exp);
     }
 
     if (clockTimestamp >= payload.exp + (options.clockTolerance || 0)) {
@@ -30,17 +29,13 @@ export function verifyExpiration(
 
   if (options.maxAge) {
     if (typeof payload.iat === 'undefined') {
-      throw createSjwtVerificationError(
-        'IatMissing',
+      throw createSjwtValidationError(
         'iat required when maxAge is specified',
       );
     }
 
     if (typeof payload.iat !== 'number') {
-      throw createSjwtVerificationError(
-        'InvalidPayload',
-        'The payload.iat property must be a number.',
-      );
+      throw createSjwtTypeError('number', typeof payload.iat);
     }
 
     let maxAgeTimestamp: number;
@@ -50,8 +45,7 @@ export function verifyExpiration(
       try {
         maxAgeTimestamp = payload.iat + ms(options.maxAge) / 1000;
       } catch (_) {
-        throw createSjwtVerificationError(
-          'InvalidMaxAgeOption',
+        throw createSjwtValidationError(
           'The maxAge option must be a number of seconds or string representing a timespan eg: "1d", "20h", 60',
         );
       }
@@ -69,17 +63,13 @@ export function verifyExpiration(
 export function verifyIssuer(payload: Payload, options: VerifyOptions): void {
   if (options.issuer) {
     if (typeof payload.iss === 'undefined') {
-      throw createSjwtVerificationError(
-        'IssMissing',
+      throw createSjwtValidationError(
         'jwt issuer missing from payload',
       );
     }
 
     if (typeof payload.iss !== 'string') {
-      throw createSjwtVerificationError(
-        'InvalidPayload',
-        'The payload.iss property must be a string.',
-      );
+      throw createSjwtTypeError('string', typeof payload.iss);
     }
 
     if (typeof options.issuer === 'string') {
@@ -101,17 +91,13 @@ export function verifyIssuer(payload: Payload, options: VerifyOptions): void {
 export function verifySubject(payload: Payload, options: VerifyOptions): void {
   if (options.subject) {
     if (typeof payload.sub === 'undefined') {
-      throw createSjwtVerificationError(
-        'SubMissing',
+      throw createSjwtValidationError(
         'jwt subject missing from payload',
       );
     }
 
     if (typeof payload.sub !== 'string') {
-      throw createSjwtVerificationError(
-        'InvalidPayload',
-        'The payload.sub property must be a string.',
-      );
+      throw createSjwtTypeError('string', typeof payload.sub);
     }
 
     if (payload.sub !== options.subject) {
@@ -126,17 +112,13 @@ export function verifySubject(payload: Payload, options: VerifyOptions): void {
 export function verifyAudience(payload: Payload, options: VerifyOptions): void {
   if (options.audience) {
     if (typeof payload.aud === 'undefined') {
-      throw createSjwtVerificationError(
-        'AudMissing',
+      throw createSjwtValidationError(
         'jwt audience missing from payload',
       );
     }
 
     if (typeof payload.aud !== 'string' && !Array.isArray(payload.aud)) {
-      throw createSjwtVerificationError(
-        'InvalidPayload',
-        'The payload.aud property must be a string or an array of strings.',
-      );
+      throw createSjwtTypeError('string or array of strings', typeof payload.aud);
     }
 
     const audiences = Array.isArray(options.audience)
@@ -173,17 +155,13 @@ export function verifyAudience(payload: Payload, options: VerifyOptions): void {
 export function verifyJwtId(payload: Payload, options: VerifyOptions): void {
   if (options.jwtId) {
     if (typeof payload.jti === 'undefined') {
-      throw createSjwtVerificationError(
-        'JwtIdMissing',
+      throw createSjwtValidationError(
         'jwt jwtId missing from payload',
       );
     }
 
     if (typeof payload.jti !== 'string') {
-      throw createSjwtVerificationError(
-        'InvalidPayload',
-        'The payload.jti property must be a string.',
-      );
+      throw createSjwtTypeError('string', typeof payload.jti);
     }
 
     if (payload.jti !== options.jwtId) {

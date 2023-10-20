@@ -29,7 +29,7 @@ describe('Verify Payload Subject', () => {
     };
 
     expect(() => verifySubject(payload, options)).toThrow(
-      'The payload.sub property must be a string.',
+      'Expected type to be string, got number',
     );
   });
 
