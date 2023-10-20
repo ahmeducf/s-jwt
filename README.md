@@ -96,7 +96,7 @@ try {
   - [Functions](#functions)
     - [generateSync / generate](#generatesync--generate)
     - [verifySync / verify](#verifysync--verify)
-- [Errors](#errors)
+- [Errors Codes](#errors-codes)
 - [Supported Algorithms](#supported-algorithms)
 - [Contributing](#contributing)
 - [License](#license)
@@ -112,7 +112,7 @@ try {
 - **Flexible**: The library supports various algorithms _(symmetric & asymmetric)_ and options.
 - **Highly Configurable**: The library is highly configurable and allows you to customize the generated JWTs and the verification process.
 - **Dual Package Support**: The library supports both CommonJS and ES Modules.
-- **Well Documented**: The library is well documented and has a detailed API reference.
+- **Well Documented**: The library is well documented and has a detailed API reference and usage examples.
 
 ## Installation
 
@@ -794,7 +794,176 @@ The `verify` function is promise-based asynchronous version of `verifySync`.
 
 - **Returns**: In case of successful verification, the decoded payload is returned. Otherwise, an error is thrown.
 
-## Errors
+## Errors Codes
+
+The library may throw the following errors:
+
+### `RsaPrivateKeyInvalid`
+
+Thrown when the provided RSA/RSA-PSS private key is invalid.
+
+**Error Type**: `SjwtTypeError`
+
+**Error Object**:
+
+- `name`: 'RsaPrivateKeyInvalid'
+- `message`: 'Invalid RSA private key: The provided private key is not supported.'
+
+### `EcdsaPrivateKeyInvalid`
+
+Thrown when the provided ECDSA private key is invalid.
+
+**Error Type**: `SjwtTypeError`
+
+**Error Object**:
+
+- `name`: 'EcdsaPrivateKeyInvalid'
+- `message`: 'Invalid ECDSA private key: The provided private key is not supported.'
+
+### `JwtTokenHeaderInvalid`
+
+Thrown when the JWT token header is invalid.
+
+**Error Type**: `SjwtTypeError`
+
+**Error Object**:
+
+- `name`: 'JwtTokenHeaderInvalid'
+- `message`: 'Invalid JWT token header: The header is not a valid JSON object encoded in base64url format.'
+
+### `JwtTokenPayloadInvalid`
+
+Thrown when the JWT token payload is invalid.
+
+**Error Type**: `SjwtTypeError`
+
+**Error Object**:
+
+- `name`: 'JwtTokenPayloadInvalid'
+- `message`: 'Invalid JWT token payload: The payload is not a valid JSON object encoded in base64url format.'
+
+### `JwtTokenSignatureInvalid`
+
+Thrown when the JWT token signature is invalid.
+
+**Error Type**: `SjwtTypeError`
+
+**Error Object**:
+
+- `name`: 'JwtTokenSignatureInvalid'
+- `message`: 'Invalid JWT token signature: The signature is not a valid base64url string.'
+
+### `JwtTokenMalformed`
+
+Thrown when the JWT token string is malformed.
+
+**Error Type**: `SjwtTypeError`
+
+**Error Object**:
+
+- `name`: 'JwtTokenMalformed'
+- `message`: 'Invalid JWT token: The token is not a valid JSON Web Token.'
+
+### `SjwtValidationError`
+
+Thrown when any of the API arguments does not meet the validation criteria.
+
+**Error Type**: `SjwtValidationError`
+
+**Error Object**:
+
+- `name`: 'SjwtValidationError'
+- `message`: '<_Error message describing the validation error_>'
+
+### `InvalidTokenType`
+
+Thrown during token verification when the token type is not `JWT`.
+
+**Error Type**: `SjwtVerificationError`
+
+**Error Object**:
+
+- `name`: 'InvalidTokenType'
+- `message`: 'Token type is not JWT'
+
+### `InvalidAlgorithm`
+
+Thrown during token verification when the algorithm in the token header is not in the list of allowed algorithms.
+
+**Error Type**: `SjwtVerificationError`
+
+**Error Object**:
+
+- `name`: 'InvalidAlgorithm'
+- `message`: 'Algorithm `header.alg` is not included in the list of allowed "algorithms" `options.algorithms`'
+
+### `InvalidIssuer`
+
+Thrown during token verification when the issuer in the token payload is not in the list of allowed issuers.
+
+**Error Type**: `SjwtVerificationError`
+
+**Error Object**:
+
+- `name`: 'InvalidIssuer'
+- `message`: 'jwt issuer invalid. expected: <`options.issuer`>'
+
+### `InvalidSubject`
+
+Thrown during token verification when the subject in the token payload is not the specified allowed subjects.
+
+**Error Type**: `SjwtVerificationError`
+
+**Error Object**:
+
+- `name`: 'InvalidSubject'
+- `message`: 'jwt subject invalid. expected: <`options.subject`>'
+
+### `InvalidAudience`
+
+Thrown during token verification when the audience in the token payload is not in the list of allowed audiences.
+
+**Error Type**: `SjwtVerificationError`
+
+**Error Object**:
+
+- `name`: 'InvalidAudience'
+- `message`: 'jwt audience invalid'
+
+### `InvalidJwtId`
+
+Thrown during token verification when the JWT ID in the token payload is not the specified allowed JWT ID.
+
+**Error Type**: `SjwtVerificationError`
+
+**Error Object**:
+
+- `name`: 'InvalidJwtId'
+- `message`: 'jwt jwtId invalid. expected: <`options.jwtId`>'
+
+### `SjwtExpiredTokenError`
+
+Thrown during token verification when the token is expired.
+
+**Error Type**: `SjwtExpiredTokenError`
+
+**Error Object**:
+
+- `name`: 'SjwtExpiredTokenError'
+- `message`:
+  - 'Expired token: jwt expired': If `options.ignoreExpiration` is `false` and the token is expired.
+  - 'Expired token: jwt maxAge exceeded': If `options.maxAge` is specified and the token age exceeds the maximum allowed age.
+
+### `InvalidSignature`
+
+Thrown during token verification when the signature is invalid.
+
+**Error Type**: `SjwtVerificationError`
+
+**Error Object**:
+
+- `name`: 'InvalidSignature'
+- `message`: 'signature verification failed'
 
 ## Supported Algorithms
 
