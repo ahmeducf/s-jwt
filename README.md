@@ -63,8 +63,40 @@ try {
 - [Introduction](#introduction)
 - [Features](#features)
 - [Installation](#installation)
-- [Usage](#usage)
-- [API](#api)
+- [Usage Examples](#usage-examples)
+  - [Generate a JWT](#generate-a-jwt)
+    - [Synchronous generation with default (HMAC SHA256) algorithm](#synchronous-generation-with-default-hmac-sha256-algorithm)
+    - [Synchronous generation with HMAC SHA512 algorithm](#synchronous-generation-with-hmac-sha512-algorithm)
+    - [Generate a token with asymmetric key algorithm](#generate-a-token-with-asymmetric-key-algorithm-rsa-sha256-in-this-example)
+    - [Asynchronous generation](#asynchronous-generation)
+    - [(Async/Await) Asynchronous generation](#asyncawait-asynchronous-generation)
+    - [Generate a token with backdated `iat` claim](#generate-a-token-with-backdated-iat-claim)
+    - [Generate a token with 1 hour expiration time](#generate-a-token-with-1-hour-expiration-time)
+    - [Generate a token with 1 hour expiration time (using `expiresIn`)](#generate-a-token-with-1-hour-expiration-time-using-expiresin)
+    - [Generate a token with 2 weeks expiration time](#generate-a-token-with-2-weeks-expiration-time)
+  - [Verify a JWT](#verify-a-jwt)
+    - [Synchronous verification with default (HMAC SHA256) algorithm](#synchronous-verification-with-default-hmac-sha256-algorithm)
+    - [Verify a token with asymmetric key algorithm](#verify-a-token-with-asymmetric-key-algorithm-rsa-sha256-in-this-example)
+    - [Asynchronous verification](#asynchronous-verification)
+    - [(Async/Await) Asynchronous verification](#asyncawait-asynchronous-verification)
+    - [Ignore expiration time verification](#ignore-expiration-time-verification)
+    - [Verify algorithm](#verify-algorithm)
+    - [Verify audience](#verify-audience)
+    - [Verify issuer](#verify-issuer)
+    - [Verify JWT ID](#verify-jwt-id)
+    - [Verify subject](#verify-subject)
+- [API Reference](#api-reference)
+  - [Types](#types)
+    - [Algorithm](#algorithm)
+    - [SecondsNumber](#secondsnumber)
+    - [Payload](#payload)
+    - [GenerateOptions](#basegenerateoptions)
+    - [VerifyOptions](#baseverifyoptions)
+    - [SjwtError](#sjwterror)
+  - [Functions](#functions)
+    - [generateSync / generate](#generatesync--generate)
+    - [verifySync / verify](#verifysync--verify)
+- [Errors Codes](#errors-codes)
 - [Supported Algorithms](#supported-algorithms)
 - [Contributing](#contributing)
 - [License](#license)
@@ -73,10 +105,6 @@ try {
 
 **S**-JWT,&emsp;_**S** for **S**imple, **S**ecure, and **S**alah **(my name)**_,&emsp;is a TypeScript library that implements the JSON Web Token (JWT), JSON Web Signature (JWS), and JSON Web Algorithms (JWA) standards defined in [RFC 7519](https://datatracker.ietf.org/doc/html/rfc7519), [RFC 7515](https://datatracker.ietf.org/doc/html/rfc7515), and [RFC 7518](https://datatracker.ietf.org/doc/html/rfc7518) respectively. It provides a simple and easy-to-use API for generating and verifying JWTs, with support for various algorithms and options.
 
-> [!NOTE]
->
-> This README is for the beta version of the library, which is still under development in the [beta](/ahmeducf/s-jwt/tree/beta) branch.
-
 ## Features
 
 - **Simple**: The API is simple and easy to use.
@@ -84,7 +112,7 @@ try {
 - **Flexible**: The library supports various algorithms _(symmetric & asymmetric)_ and options.
 - **Highly Configurable**: The library is highly configurable and allows you to customize the generated JWTs and the verification process.
 - **Dual Package Support**: The library supports both CommonJS and ES Modules.
-- **Well Documented**: The library is well documented and has a detailed API reference.
+- **Well Documented**: The library is well documented and has a detailed API reference and usage examples.
 
 ## Installation
 
@@ -104,7 +132,309 @@ yarn add @ahmeducf/s-jwt
 
 ```
 
-## API
+## Usage Examples
+
+This section contains some examples of how to use the library API.
+
+### Generate a JWT
+
+#### Synchronous generation with default (HMAC SHA256) algorithm
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+const jwtToken = jwt.generateSync({ foo: 'bar' }, { secretKey: 'secret' });
+```
+
+#### Synchronous generation with HMAC SHA512 algorithm
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+try {
+  const jwtToken = jwt.generateSync(
+    { foo: 'bar' },
+    { secretKey: 'secret', algorithm: 'HS512' },
+  );
+} catch (error) {
+  // Handle error
+}
+```
+
+#### Generate a token with asymmetric key algorithm (RSA SHA256 in this example)
+
+```typescript
+import fs from 'fs';
+import jwt, { GenerateOptions } from '@ahmeducf/s-jwt';
+
+const rsaPrivateKey: Buffer = fs.readFileSync('rsa.private.key');
+
+const options: GenerateOptions = {
+  privateKey: rsaPrivateKey,
+  algorithm: 'RS256',
+};
+
+try {
+  const jwtToken = jwt.generateSync({ foo: 'bar' }, options);
+} catch (error) {
+  // Handle error
+}
+```
+
+#### Asynchronous generation
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+const jwtToken = jwt
+  .generate({ foo: 'bar' }, { secretKey: 'secret' })
+  .then((jwtToken) => {
+    // Handle success
+  })
+  .catch((error) => {
+    // Handle error
+  });
+```
+
+#### (Async/Await) Asynchronous generation
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+async function generateAsync(payload: Payload, options: GenerateOptions): void {
+  try {
+    const jwtToken = await jwt.generate(payload, options);
+    // Handle success
+  } catch (error) {
+    // Handle error
+  }
+}
+
+generateAsync({ foo: 'bar' }, { secretKey: 'secret' });
+```
+
+#### Generate a token with backdated `iat` claim
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+try {
+  const jwtToken = jwt.generateSync(
+    { foo: 'bar', iat: Math.floor(Date.now() / 1000) - 30 },
+    { secretKey: 'secret' },
+  );
+} catch (error) {
+  // Handle error
+}
+```
+
+#### Generate a token with 1 hour expiration time
+
+```typescript
+import jwt, { Payload } from '@ahmeducf/s-jwt';
+
+const payload: Payload = {
+  foo: 'bar',
+  exp: Math.floor(Date.now() / 1000) + 3600,
+};
+
+try {
+  const jwtToken: string = jwt.generateSync(payload, { secretKey: 'secret' });
+} catch (error) {
+  // Handle error
+}
+```
+
+#### Generate a token with 1 hour expiration time (using `expiresIn`)
+
+```typescript
+import jwt, { GenerateOptions} from '@ahmeducf/s-jwt';
+
+const options: GenerateOptions = {
+  secretKey: 'secret'
+  expiresIn: '1h',
+}
+
+try {
+  const jwtToken: string = jwt.generateSync({ foo: 'bar' }, options);
+} catch (error) {
+  // Handle error
+}
+```
+
+#### Generate a token with 2 weeks expiration time
+
+```typescript
+import jwt, { GenerateOptions } from '@ahmeducf/s-jwt';
+
+const options: GenerateOptions = {
+  secretKey: 'secret',
+  expiresIn: '2 weeks', // equivalent to 1209600, '14 days', '336h', '20160m', '1209600s', '2016000000'
+};
+
+try {
+  const jwtToken: string = jwt.generateSync({ foo: 'bar' }, options);
+} catch (error) {
+  // Handle error
+}
+```
+
+### Verify a JWT
+
+#### Synchronous verification with default (HMAC SHA256) algorithm
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+try {
+  const decodedPayload = jwt.verifySync(jwtToken, { secretKey: 'secret' });
+} catch (error) {
+  // Handle error
+}
+```
+
+#### Verify a token with asymmetric key algorithm (RSA SHA256 in this example)
+
+```typescript
+import fs from 'fs';
+import jwt, { VerifyOptions } from '@ahmeducf/s-jwt';
+
+const rsaPublicKey: Buffer = fs.readFileSync('rsa.public.key');
+
+const options: VerifyOptions = {
+  publicKey: rsaPublicKey,
+  algorithms: ['RS256'],
+};
+
+try {
+  const decodedPayload = jwt.verifySync(jwtToken, options);
+} catch (error) {
+  // Handle error
+}
+```
+
+#### Asynchronous verification
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+const decodedPayload = jwt
+  .verify(token, { secretKey: 'secret' })
+  .then((decodedPayload) => {
+    // Handle success
+  })
+  .catch((error) => {
+    // Handle error
+  });
+```
+
+#### (Async/Await) Asynchronous verification
+
+```typescript
+import jwt, { VerifyOptions } from '@ahmeducf/s-jwt';
+
+async function verifyAsync(token: string, options: VerifyOptions): void {
+  try {
+    const decodedPayload = await jwt.verify(token, options);
+    // Handle success
+  } catch (error) {
+    // Handle error
+  }
+}
+
+verifyAsync({ foo: 'bar' }, { secretKey: 'secret' });
+```
+
+#### Ignore expiration time verification
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+try {
+  const decodedPayload = jwt.verifySync(token, {
+    secretKey: 'secret',
+    ignoreExpiration: true,
+  });
+} catch (error) {
+  // Handle error
+}
+```
+
+#### Verify algorithm
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+try {
+  const decodedPayload = jwt.verifyAsync(token, {
+    secretKey: 'secret',
+    algorithms: ['HS256'],
+  });
+} catch (error) {
+  // If the algorithm in the token header is not HS256, error === SjwtVerificationError
+}
+```
+
+#### Verify audience
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+try {
+  const decodedPayload = jwt.verifySync(token, {
+    secretKey: 'secret',
+    audience: 'foo',
+  });
+} catch (error) {
+  // If the audience in the token payload is not foo, error === SjwtVerificationError
+}
+```
+
+#### Verify issuer
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+try {
+  const decodedPayload = jwt.verifySync(token, {
+    secretKey: 'secret',
+    issuer: ['foo', 'bar'],
+  });
+} catch (error) {
+  // If the issuer in the token payload is not foo or bar, error === SjwtVerificationError
+}
+```
+
+#### Verify JWT ID
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+try {
+  const decodedPayload = jwt.verifySync(token, {
+    secretKey: 'secret',
+    jwtId: 'foo',
+  });
+} catch (error) {
+  // If the JWT ID in the token payload is not foo, error === SjwtVerificationError
+}
+```
+
+#### Verify subject
+
+```typescript
+import jwt from '@ahmeducf/s-jwt';
+
+try {
+  const decodedPayload = jwt.verifySync(token, {
+    secretKey: 'secret',
+    subject: 'foo',
+  });
+} catch (error) {
+  // If the subject in the token payload is not foo, error === SjwtVerificationError
+}
+```
+
+## API Reference
 
 The library has a simple and easy-to-use API. It provides two functions for generating and verifying JWTs, accompanied by a set of types and interfaces.
 
@@ -369,10 +699,14 @@ interface SjwtExpiredTokenError extends SjwtVerificationError {
 
 The library provides the following functions:
 
-#### `generateSync(payload: Payload, options: GenerateOptions): string` <br> `generate(payload: Payload, options: GenerateOptions): Promise<string>`
+#### `generateSync / generate`
+
+`generateSync(payload: Payload, options: GenerateOptions): string`
 
 The `generateSync` function is a synchronous function that generates a JWT.
 It takes a payload and options as arguments and returns a JWT string.
+
+`generate(payload: Payload, options: GenerateOptions): Promise<string>`
 
 The `generate` function is promise-based asynchronous version of `generateSync`.
 
@@ -409,10 +743,14 @@ The `generate` function is promise-based asynchronous version of `generateSync`.
 
 - **Returns**: In case of successful generation, the generated JWT is returned. Otherwise, an error is thrown.
 
-#### `verifySync(token: string, options: VerifyOptions): Payload` <br> `verify(token: string, options: VerifyOptions): Promise<Payload>`
+#### `verifySync / verify`
+
+`verifySync(token: string, options: VerifyOptions): Payload`
 
 The `verifySync` function is a synchronous function that verifies a JWT.
 It takes a JWT string and options as arguments and returns the decoded payload.
+
+`verify(token: string, options: VerifyOptions): Promise<Payload>`
 
 The `verify` function is promise-based asynchronous version of `verifySync`.
 
@@ -456,7 +794,176 @@ The `verify` function is promise-based asynchronous version of `verifySync`.
 
 - **Returns**: In case of successful verification, the decoded payload is returned. Otherwise, an error is thrown.
 
-## Errors
+## Errors Codes
+
+The library may throw the following errors:
+
+### `RsaPrivateKeyInvalid`
+
+Thrown when the provided RSA/RSA-PSS private key is invalid.
+
+**Error Type**: `SjwtTypeError`
+
+**Error Object**:
+
+- `name`: 'RsaPrivateKeyInvalid'
+- `message`: 'Invalid RSA private key: The provided private key is not supported.'
+
+### `EcdsaPrivateKeyInvalid`
+
+Thrown when the provided ECDSA private key is invalid.
+
+**Error Type**: `SjwtTypeError`
+
+**Error Object**:
+
+- `name`: 'EcdsaPrivateKeyInvalid'
+- `message`: 'Invalid ECDSA private key: The provided private key is not supported.'
+
+### `JwtTokenHeaderInvalid`
+
+Thrown when the JWT token header is invalid.
+
+**Error Type**: `SjwtTypeError`
+
+**Error Object**:
+
+- `name`: 'JwtTokenHeaderInvalid'
+- `message`: 'Invalid JWT token header: The header is not a valid JSON object encoded in base64url format.'
+
+### `JwtTokenPayloadInvalid`
+
+Thrown when the JWT token payload is invalid.
+
+**Error Type**: `SjwtTypeError`
+
+**Error Object**:
+
+- `name`: 'JwtTokenPayloadInvalid'
+- `message`: 'Invalid JWT token payload: The payload is not a valid JSON object encoded in base64url format.'
+
+### `JwtTokenSignatureInvalid`
+
+Thrown when the JWT token signature is invalid.
+
+**Error Type**: `SjwtTypeError`
+
+**Error Object**:
+
+- `name`: 'JwtTokenSignatureInvalid'
+- `message`: 'Invalid JWT token signature: The signature is not a valid base64url string.'
+
+### `JwtTokenMalformed`
+
+Thrown when the JWT token string is malformed.
+
+**Error Type**: `SjwtTypeError`
+
+**Error Object**:
+
+- `name`: 'JwtTokenMalformed'
+- `message`: 'Invalid JWT token: The token is not a valid JSON Web Token.'
+
+### `SjwtValidationError`
+
+Thrown when any of the API arguments does not meet the validation criteria.
+
+**Error Type**: `SjwtValidationError`
+
+**Error Object**:
+
+- `name`: 'SjwtValidationError'
+- `message`: '<_Error message describing the validation error_>'
+
+### `InvalidTokenType`
+
+Thrown during token verification when the token type is not `JWT`.
+
+**Error Type**: `SjwtVerificationError`
+
+**Error Object**:
+
+- `name`: 'InvalidTokenType'
+- `message`: 'Token type is not JWT'
+
+### `InvalidAlgorithm`
+
+Thrown during token verification when the algorithm in the token header is not in the list of allowed algorithms.
+
+**Error Type**: `SjwtVerificationError`
+
+**Error Object**:
+
+- `name`: 'InvalidAlgorithm'
+- `message`: 'Algorithm `header.alg` is not included in the list of allowed "algorithms" `options.algorithms`'
+
+### `InvalidIssuer`
+
+Thrown during token verification when the issuer in the token payload is not in the list of allowed issuers.
+
+**Error Type**: `SjwtVerificationError`
+
+**Error Object**:
+
+- `name`: 'InvalidIssuer'
+- `message`: 'jwt issuer invalid. expected: <`options.issuer`>'
+
+### `InvalidSubject`
+
+Thrown during token verification when the subject in the token payload is not the specified allowed subjects.
+
+**Error Type**: `SjwtVerificationError`
+
+**Error Object**:
+
+- `name`: 'InvalidSubject'
+- `message`: 'jwt subject invalid. expected: <`options.subject`>'
+
+### `InvalidAudience`
+
+Thrown during token verification when the audience in the token payload is not in the list of allowed audiences.
+
+**Error Type**: `SjwtVerificationError`
+
+**Error Object**:
+
+- `name`: 'InvalidAudience'
+- `message`: 'jwt audience invalid'
+
+### `InvalidJwtId`
+
+Thrown during token verification when the JWT ID in the token payload is not the specified allowed JWT ID.
+
+**Error Type**: `SjwtVerificationError`
+
+**Error Object**:
+
+- `name`: 'InvalidJwtId'
+- `message`: 'jwt jwtId invalid. expected: <`options.jwtId`>'
+
+### `SjwtExpiredTokenError`
+
+Thrown during token verification when the token is expired.
+
+**Error Type**: `SjwtExpiredTokenError`
+
+**Error Object**:
+
+- `name`: 'SjwtExpiredTokenError'
+- `message`:
+  - 'Expired token: jwt expired': If `options.ignoreExpiration` is `false` and the token is expired.
+  - 'Expired token: jwt maxAge exceeded': If `options.maxAge` is specified and the token age exceeds the maximum allowed age.
+
+### `InvalidSignature`
+
+Thrown during token verification when the signature is invalid.
+
+**Error Type**: `SjwtVerificationError`
+
+**Error Object**:
+
+- `name`: 'InvalidSignature'
+- `message`: 'signature verification failed'
 
 ## Supported Algorithms
 
